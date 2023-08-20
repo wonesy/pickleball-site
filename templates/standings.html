@@ -1,0 +1,33 @@
+<!-- standings.html -->
+{% extends "base.html" %}
+
+{% block title %}Standings{% endblock title %}
+
+{% block content %}
+<table class="table table-striped">
+  <thead class="thead-light">
+    <tr>
+      <th>Rank</th>
+      <th>Player</th>
+      {% for week in weeks %}
+      <th>Week {{ week }}</th>
+      {% endfor %}
+      <th>Total Points</th>
+      <th>Rating</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for player_data in standings_data %}
+    <tr>
+      <td>{{ player_data.rank }}</td>
+      <td><a href="{% url 'schedule' player_data.player %}">{{ player_data.player }}</a></td>
+      {% for week_points in player_data.points_by_week %}
+      <td>{{ week_points }}</td>
+      {% endfor %}
+      <td>{{ player_data.total_points }}</td>
+      <td>{{ player_data.rating }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock content %}

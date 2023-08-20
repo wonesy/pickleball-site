@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+<!-- TODO: Troubleshoot extending load static from base.html -->
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}Submit Result{% endblock title %}
+
+{% block content %}
+<h2>Match Result</h2>
+<form method="post">{% csrf_token %}
+  <div class="form-group">
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="forfeit" id="forfeit-player" value="player">
+      <label class="form-check-label" for="forfeit-player">{{ match.player }} forfeited</label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="forfeit" id="forfeit-opponent" value="opponent">
+      <label class="form-check-label" for="forfeit-opponent">{{ match.opponent }} forfeited</label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="forfeit" id="forfeit-none" value="none">
+      <label class="form-check-label" for="forfeit-none">No forfeit</label>
+    </div>
+  </div>
+
+  <div id="game-scores" style="display: none;">
+    <div class="form-group">
+      <label for="game1-score">Game 1 Score:</label>
+      <input type="text" id="game1-score" name="game1_score" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="game2-score">Game 2 Score:</label>
+      <input type="text" id="game2-score" name="game2_score" class="form-control">
+    </div>
+    <div class="form-group game3-score-group" style="margin-bottom: 10px;">
+      <label for="game3-score">Game 3 Score:</label>
+      <input type="text" id="game3-score" name="game3_score" class="form-control">
+    </div>
+  </div>
+
+  <button id="submit-button" class="btn btn-success ml-2" type="submit" style="display: none;">Submit</button>
+</form>
+
+<script src="{% static 'js/submit_result.js' %}"></script>
+{% endblock content %}

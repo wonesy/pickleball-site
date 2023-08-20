@@ -1,0 +1,87 @@
+<!-- schedule.html -->
+{% extends "base.html" %}
+
+{% block title %}Schedule{% endblock title %}
+
+{% block content %}
+<div class="player-header">
+  <h4>{{ requested_user.username }}</h4>
+  <h6>Rank: {{ requested_user.rank}}</h6>
+  <h6>Rating: {{ requested_user.rating }}</h6>
+</div>
+
+<table class="table table-striped">
+  <thead class="thead-light">
+    <tr>
+      <th>Week</th>
+      <th>Opponent</th>
+      <th>Location</th>
+      <th>Contact</th>
+      <th>Deadline</th>
+      <th>Result</th>
+      <th>Points</th>
+      <th>Game 1</th>
+      <th>Game 2</th>
+      <th>Game 3</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for match in matches %}
+    <tr>
+      <td>{{ match.week }}</td>
+      <td>
+        {% if match.player == requested_user %}
+        {{ match.opponent.username }}
+        {% else %}
+        {{ match.player.username }}
+        {% endif %}
+      </td>
+      <td>
+        {% if match.player == requested_user %}
+        HOME
+        {% else %}
+        AWAY
+        {% endif %}
+      </td>
+      <td>
+        {% if match.player == requested_user %}
+        {{ match.opponent.phone }}
+        {% else %}
+        {{ match.player.phone }}
+        {% endif %}
+      </td>
+      <td>{{ match.deadline }}</td>
+      <td>
+        <!-- Only authenticated user can submit results for home matches -->
+        <!-- Currently can submit results from current and opponent's schedule -->
+        {% if match.player == user and not match.player_result %}
+        <a href="{% url 'submit_result' match.id %}">Submit</a>
+        {% else %}
+        {% if match.player == requested_user %}
+        {{ match.player_result }}
+        {% else %}
+        {{ match.opponent_result }}
+        {% endif %}
+        {% endif %}
+      </td>
+      <td>
+        <!-- match has been played-->
+        <!-- use player_result to still dispaly 0 points -->
+        {% if match.player_result %}
+        {% if match.player == requested_user %}
+        {{ match.player_match_points }}
+        <!-- match has not been played -->
+        {% else %}
+        {{ match.opponent_match_points }}
+        {% endif %}
+        {% else %}
+        {% endif %}
+      </td>
+      <td>{{ match.game1_score }}</td>
+      <td>{{ match.game2_score }}</td>
+      <td>{{ match.game3_score }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock content %}
